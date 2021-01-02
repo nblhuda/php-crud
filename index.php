@@ -1,4 +1,18 @@
-<?php include('server.php'); ?>
+<?php include('server.php'); 
+    
+    //fetch the record to be updated
+    if(isset($_GET['edit'])){
+        $id = $_GET['edit'];
+        $edit_state = true;
+
+        $rec = mysqli_query($db, "SELECT * FROM info WHERE id=$id");
+        $record = mysqli_fetch_array($rec);
+        $name = $record['name'];
+        $address = $record['address'];
+        $id = $record['id'];
+    }
+
+?>
 <html>
    <head>
        <title>CRUD</title>
@@ -29,26 +43,31 @@
                         <td><?php echo $row['name']; ?></td>
                         <td><?php echo $row['address']; ?></td>
                         <td>
-                            <a href="index.php?edit=<?php echo $row['id']; ?>" class="edit_btn" >Edit</a>
+                            <a class="edit_btn" href="index.php?edit=<?php echo $row['id']; ?>" class="edit_btn" >Edit</a>
                         </td>
                         <td>
-                            <a href="server.php?del=<?php echo $row['id']; ?>" class="del_btn">Delete</a>
+                            <a class="del_btn" href="server.php?del=<?php echo $row['id']; ?>" class="del_btn">Delete</a>
                         </td>
                     </tr>
                 <?php } ?>
             </tbody>
     </table>
     <form method="post" action="server.php">
+        <input type="hidden" name="id" value="<?php echo $id; ?>">
             <div class="input-group">
                 <label>Name</label>
-                <input type="text" name="name">
+                <input type="text" name="name" value="<?php echo $name; ?>">
             </div>
             <div class="input-group">
                 <label>Address</label>
-                <input type="text" name="address">
+                <input type="text" name="address" value="<?php echo $address; ?>">
             </div>
             <div class="input-group">
-                <button type="submit" name="save" class="btn">Save</button>
+            <?php if ($edit_state == false): ?>
+                <button class="btn" type="submit" name="save" >Save</button>
+            <?php else: ?>
+                <button class="btn" type="submit" name="update" style="background: #556B2F;" >Update</button>
+            <?php endif ?>
             </div>
     </form>
    </body>

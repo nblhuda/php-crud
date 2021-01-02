@@ -7,7 +7,8 @@
 	$name = "";
 	$address = "";
 	$id = 0;
-	$update = false;
+	//update record
+    $edit_state = false;
 
     //if save button is clicked
     if (isset($_POST['save'])) {
@@ -17,6 +18,18 @@
 		mysqli_query($db, "INSERT INTO info (name, address) VALUES ('$name', '$address')"); 
 		$_SESSION['message'] = "Address saved"; 
 		header('location: index.php');
+    }
+
+    //update record
+    if (isset($_POST['update'])) {
+        $name = $_POST['name']; 
+        $address =  $_POST['address'];
+        $id =  $_POST['id'];
+
+    
+        mysqli_query($db, "UPDATE info SET name='$name', address='$address' WHERE id=$id");
+        $_SESSION['message'] = "Address updated!"; 
+        header('location: index.php');
     }
     
     //retrieve records
